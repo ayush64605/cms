@@ -27,8 +27,7 @@ class partiesscreenState extends State<partiesscreen> {
   final TextEditingController _partyNumberController = TextEditingController();
   String companyName = ''; // Declare companyName as a class-level variable
   final TextEditingController _searchController = TextEditingController();
-    String _searchQuery = '';
-
+  String _searchQuery = '';
 
   Future<String?> _saveparty() async {
     if (_formKey.currentState!.validate()) {
@@ -42,6 +41,7 @@ class partiesscreenState extends State<partiesscreen> {
           'partyName': _partyNameController.text.trim(),
           'partyNumber': _partyNumberController.text.trim(),
         });
+        Navigator.of(context).pop();
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('party added successfully!')),
@@ -58,35 +58,35 @@ class partiesscreenState extends State<partiesscreen> {
     return null;
   }
 
-
   Future<double> _fetchTotalPayments(String partyDocId) async {
-  try {
-    QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.userId)
-        .collection('parties')
-        .doc(partyDocId)
-        .collection('payments')
-        .where('paymentMethod', isEqualTo: 'To Received')
-        .get();
+    try {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.userId)
+          .collection('parties')
+          .doc(partyDocId)
+          .collection('payments')
+          .where('paymentMethod', isEqualTo: 'To Received')
+          .get();
 
-    double total = 0.0;
+      double total = 0.0;
 
-    for (var doc in snapshot.docs) {
-      // Check if 'amount' is a String, then convert it to double
-      String amountString = doc['amount'] ?? '0.0'; // Default to '0.0' if null
-      double amount = double.tryParse(amountString) ?? 0.0; // Convert to double
+      for (var doc in snapshot.docs) {
+        // Check if 'amount' is a String, then convert it to double
+        String amountString =
+            doc['amount'] ?? '0.0'; // Default to '0.0' if null
+        double amount =
+            double.tryParse(amountString) ?? 0.0; // Convert to double
 
-      total += amount; // Add to total
+        total += amount; // Add to total
+      }
+
+      return total;
+    } catch (e) {
+      print('Error fetching payments: $e');
+      return 0.0; // Return 0.0 in case of an error
     }
-
-    return total;
-  } catch (e) {
-    print('Error fetching payments: $e');
-    return 0.0; // Return 0.0 in case of an error
   }
-}
-
 
   Future<double> _fetchTotalPaymentsOut(String partyDocId) async {
     try {
@@ -102,12 +102,14 @@ class partiesscreenState extends State<partiesscreen> {
       double total = 0.0;
 
       for (var doc in snapshot.docs) {
-      // Check if 'amount' is a String, then convert it to double
-      String amountString = doc['amount'] ?? '0.0'; // Default to '0.0' if null
-      double amount = double.tryParse(amountString) ?? 0.0; // Convert to double
+        // Check if 'amount' is a String, then convert it to double
+        String amountString =
+            doc['amount'] ?? '0.0'; // Default to '0.0' if null
+        double amount =
+            double.tryParse(amountString) ?? 0.0; // Convert to double
 
-      total += amount; // Add to total
-    }
+        total += amount; // Add to total
+      }
 
       return total;
     } catch (e) {
@@ -171,7 +173,7 @@ class partiesscreenState extends State<partiesscreen> {
     super.initState();
     fetchCompanyName();
     fetchUserName();
-     _searchController.addListener(() {
+    _searchController.addListener(() {
       setState(() {
         _searchQuery = _searchController.text.trim().toLowerCase();
       });
@@ -184,7 +186,6 @@ class partiesscreenState extends State<partiesscreen> {
     super.dispose();
   }
 
- 
   Future<void> fetchCompanyName() async {
     try {
       DocumentSnapshot userDoc = await FirebaseFirestore.instance
@@ -528,7 +529,6 @@ class partiesscreenState extends State<partiesscreen> {
                                         children: [
                                           ElevatedButton(
                                             onPressed: () async {
-                                              Navigator.of(context).pop();
                                               if (_formKey.currentState!
                                                   .validate()) {
                                                 String? partyDocId =
@@ -612,12 +612,12 @@ class partiesscreenState extends State<partiesscreen> {
 
                     var party = snapshot.data!.docs;
                     if (_searchQuery.isNotEmpty) {
-                          party = party.where((party) {
-                            var partyName =
-                                party['partyName'].toString().toLowerCase();
-                            return partyName.contains(_searchQuery);
-                          }).toList();
-                        }
+                      party = party.where((party) {
+                        var partyName =
+                            party['partyName'].toString().toLowerCase();
+                        return partyName.contains(_searchQuery);
+                      }).toList();
+                    }
 
                     if (party.isEmpty) {
                       return Center(child: Text('No party created.'));
@@ -801,56 +801,55 @@ class partiesscreenState extends State<partiesscreen> {
                                             ],
                                           ),
                                           Divider(color: Colors.black26),
-                                        FutureBuilder<List<double>>(
-                                          future: Future.wait([
-                                            _fetchTotalPayments(
-                                                partyDocId), // Fetch total "payment in"
-                                            _fetchTotalPaymentsOut(
-                                                partyDocId), // Fetch total "payment out"
-                                          ]),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.connectionState ==
-                                                ConnectionState.waiting) {
-                                              return Center(
-                                                  child:
-                                                      Text('Loading...'));
-                                            } else if (snapshot.hasError) {
-                                              return Text(
-                                                  'Error: ${snapshot.error}');
-                                            } else {
-                                              double totalIn =
-                                                  snapshot.data![0];
-                                              double totalOut =
-                                                  snapshot.data![1];
+                                          FutureBuilder<List<double>>(
+                                            future: Future.wait([
+                                              _fetchTotalPayments(
+                                                  partyDocId), // Fetch total "payment in"
+                                              _fetchTotalPaymentsOut(
+                                                  partyDocId), // Fetch total "payment out"
+                                            ]),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return Center(
+                                                    child: Text('Loading...'));
+                                              } else if (snapshot.hasError) {
+                                                return Text(
+                                                    'Error: ${snapshot.error}');
+                                              } else {
+                                                double totalIn =
+                                                    snapshot.data![0];
+                                                double totalOut =
+                                                    snapshot.data![1];
 
-                                              return Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Text(
-                                                    'Rs. ${totalIn.toStringAsFixed(2)} in',
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      color: Colors.green,
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                                                return Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      'Rs. ${totalIn.toStringAsFixed(2)} in',
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.green,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
                                                     ),
-                                                  ),
-                                                  Text(
-                                                    'Rs. ${totalOut.toStringAsFixed(2)} out',
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      color: Colors.red,
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                                                    Text(
+                                                      'Rs. ${totalOut.toStringAsFixed(2)} out',
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.red,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
-                                              );
-                                            }
-                                          },
-                                        ),
+                                                  ],
+                                                );
+                                              }
+                                            },
+                                          ),
                                         ],
                                       ),
                                     ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/screens/material.dart';
 import 'package:myapp/screens/members.dart';
+import 'package:myapp/screens/project_screen.dart';
 import 'package:myapp/screens/task.dart';
 
 class EditProfile extends StatefulWidget {
@@ -76,6 +77,11 @@ class _EditProfileState extends State<EditProfile> {
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
+    final double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    final bool isKeyboardVisible = keyboardHeight > 0;
+    final double imageTopPadding = screenHeight * 0.38;
+    final double adjustedImageTopPadding =
+    isKeyboardVisible ? screenHeight * 0.03 : imageTopPadding;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -104,7 +110,7 @@ class _EditProfileState extends State<EditProfile> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        Members(userId: widget.userId),
+                                        ProjectScreen(userId: widget.userId),
                                   ),
                                 );
                               },
@@ -209,7 +215,7 @@ class _EditProfileState extends State<EditProfile> {
 
             // Save Button
             Padding(
-              padding: EdgeInsets.only(top: screenHeight * 0.40),
+              padding: EdgeInsets.only(top: adjustedImageTopPadding),
               child: SizedBox(
                 width: screenWidth * 0.8,
                 height: 50,

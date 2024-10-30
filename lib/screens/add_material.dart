@@ -25,7 +25,7 @@ class _AddMaterialState extends State<AddMaterial> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     final bool isKeyboardVisible = keyboardHeight > 0;
-    final double imageTopPadding = screenHeight * 0.35;
+    final double imageTopPadding = screenHeight * 0.36;
     final double adjustedImageTopPadding =
     isKeyboardVisible ? screenHeight * 0.005 : imageTopPadding;
 

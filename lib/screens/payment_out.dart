@@ -19,6 +19,17 @@ class _PaymentOutPageState extends State<PaymentOutPage> {
   String _selectedPaymentMethod = 'Cash'; // Default selected value
 
   Future<void> _savePayment() async {
+
+    String paymentfrom = _paymentToController.text;
+    String amount = _amountController.text;
+    String description = _descriptionController.text;
+    if (paymentfrom.isEmpty || amount.isEmpty || description.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please fill all fields')),
+      );
+      return;
+    }
+
     try {
       await FirebaseFirestore.instance
           .collection('users')

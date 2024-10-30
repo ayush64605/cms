@@ -504,7 +504,7 @@ class _MaterialscreenState extends State<Materialscreen> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(bottom: screenHeight * 0.05),
+              padding: EdgeInsets.only(bottom: screenHeight * 0.04),
               child: SizedBox(
                 width: screenWidth * 0.8,
                 height: 50,

@@ -20,6 +20,15 @@ class _AddItemState extends State<AddItem> {
   final GlobalKey<FormState> _formKey =
       GlobalKey<FormState>(); 
   Future<void> _saveItem() async {
+    String item = _itemNameController.text;
+    String qty = _qtyController.text;
+    String unitRate= _unitRateController.text;
+    if (item.isEmpty || qty.isEmpty || unitRate.isEmpty || _selectedUnit!.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please fill all fields')),
+      );
+      return;
+    }
     if (_formKey.currentState!.validate()) {
       try {
         DocumentReference userRef =
@@ -126,12 +135,6 @@ class _AddItemState extends State<AddItem> {
                               color: Color.fromARGB(255, 4, 63, 132)),
                         ),
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter the item name';
-                        }
-                        return null;
-                      },
                     ),
                     SizedBox(height: 16),
 
@@ -155,12 +158,6 @@ class _AddItemState extends State<AddItem> {
                               ),
                             ),
                             keyboardType: TextInputType.number,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter the quantity';
-                              }
-                              return null;
-                            },
                           ),
                         ),
                         SizedBox(width: 16),
@@ -193,12 +190,6 @@ class _AddItemState extends State<AddItem> {
                                     color: Color.fromARGB(255, 4, 63, 132)),
                               ),
                             ),
-                            validator: (value) {
-                              if (value == null) {
-                                return 'Please select a unit';
-                              }
-                              return null;
-                            },
                           ),
                         ),
                       ],
@@ -220,12 +211,6 @@ class _AddItemState extends State<AddItem> {
                               color: Color.fromARGB(255, 4, 63, 132)),
                         ),
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter the Unit rate';
-                        }
-                        return null;
-                      },
                     ),
                     SizedBox(width: 16),
 

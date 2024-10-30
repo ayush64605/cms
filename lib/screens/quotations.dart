@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:myapp/screens/add_quotation.dart';
 import 'package:myapp/screens/change_password.dart';
 import 'package:myapp/screens/edit_profile.dart';
@@ -52,6 +53,7 @@ class _quotationscreenState extends State<quotationscreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Quotation added successfully!')),
         );
+        Navigator.of(context).pop();
 
         return docRef.id; // Returning the document ID
       } catch (e) {
@@ -484,9 +486,17 @@ class _quotationscreenState extends State<quotationscreen> {
                                                 BorderRadius.circular(15),
                                           ),
                                         ),
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp(r'^[a-zA-Z\s]+$')),
+                                        ],
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
-                                            return 'Please enter a clinet name';
+                                            return 'Please enter a client name';
+                                          }
+                                          if (!RegExp(r'^[a-zA-Z\s]+$')
+                                              .hasMatch(value)) {
+                                            return 'Please enter only characters';
                                           }
                                           return null;
                                         },
@@ -498,7 +508,6 @@ class _quotationscreenState extends State<quotationscreen> {
                                         children: [
                                           ElevatedButton(
                                             onPressed: () async {
-                                              Navigator.of(context).pop();
                                               if (_formKey.currentState!
                                                   .validate()) {
                                                 String? quotationDocId =

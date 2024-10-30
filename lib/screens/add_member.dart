@@ -14,11 +14,8 @@ class AddMember extends StatefulWidget {
 }
 
 class _AddMemberState extends State<AddMember> {
-  final TextEditingController _taskNameController = TextEditingController();
-  final TextEditingController _startDateController = TextEditingController();
-  final TextEditingController _qtyController = TextEditingController();
-  final TextEditingController _unitController = TextEditingController();
-  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _memberNameController = TextEditingController();
+  final TextEditingController _phonenumberController = TextEditingController();
   String? _selectedMemberType;
   String? _selectedProject;
   List<String> _projects = [];
@@ -52,14 +49,22 @@ class _AddMemberState extends State<AddMember> {
   }
 
   Future<void> _saveMember() async {
+    String name = _memberNameController.text;
+    String number = _phonenumberController.text;
+    if (name.isEmpty || number.isEmpty || _selectedMemberType!.isEmpty || _selectedProject!.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please fill all fields')),
+      );
+      return;
+    }
     try {
       await FirebaseFirestore.instance
           .collection('users')
           .doc(widget.userId)
           .collection('members')
           .add({
-        'memberName': _taskNameController.text,
-        'phoneNumber': _priceController.text,
+        'memberName': _memberNameController.text,
+        'phoneNumber': _phonenumberController.text,
         'memberType': _selectedMemberType,
         'project': _selectedProject,
       });
@@ -81,6 +86,11 @@ class _AddMemberState extends State<AddMember> {
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
+    final double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    final bool isKeyboardVisible = keyboardHeight > 0;
+    final double imageTopPadding = screenHeight * 0.37;
+    final double adjustedImageTopPadding =
+    isKeyboardVisible ? screenHeight * 0.005 : imageTopPadding;
 
     Future<void> _selectDate(
         BuildContext context, TextEditingController controller) async {
@@ -163,7 +173,7 @@ class _AddMemberState extends State<AddMember> {
                   children: [
                     // Member Name field
                     TextFormField(
-                      controller: _taskNameController,
+                      controller: _memberNameController,
                       decoration: InputDecoration(
                         labelText: 'Member Name',
                         border: OutlineInputBorder(),
@@ -180,7 +190,7 @@ class _AddMemberState extends State<AddMember> {
                     SizedBox(height: 16),
                     // Phone no. field
                     TextFormField(
-                      controller: _priceController,
+                      controller: _phonenumberController,
                       decoration: InputDecoration(
                         labelText: 'Phone no.',
                         border: OutlineInputBorder(),
@@ -258,7 +268,7 @@ class _AddMemberState extends State<AddMember> {
       
               // Save Button
               Padding(
-                padding: EdgeInsets.only(top: screenHeight * 0.40),
+              padding: EdgeInsets.only(top: adjustedImageTopPadding),
                 child: SizedBox(
                   width: screenWidth * 0.8,
                   height: 50,

@@ -18,6 +18,17 @@ class _PaymentInPageState extends State<PaymentInPage> {
   String _selectedPaymentMethod = 'Cash'; // Default selected value
 
   Future<void> _savePayment() async {
+
+    String paymentfrom = _paymentFromController.text;
+    String amount = _amountController.text;
+    String description = _descriptionController.text;
+    if (paymentfrom.isEmpty || amount.isEmpty || description.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please fill all fields')),
+      );
+      return;
+    }
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -56,7 +67,6 @@ class _PaymentInPageState extends State<PaymentInPage> {
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
-    
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -137,6 +147,12 @@ class _PaymentInPageState extends State<PaymentInPage> {
                             BorderSide(color: Color.fromARGB(255, 4, 63, 132)),
                       ),
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter the payment source';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(height: 16),
 
@@ -156,6 +172,15 @@ class _PaymentInPageState extends State<PaymentInPage> {
                       ),
                     ),
                     keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter the amount received';
+                      }
+                      if (double.tryParse(value) == null) {
+                        return 'Please enter a valid number';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(height: 16),
 
@@ -175,6 +200,12 @@ class _PaymentInPageState extends State<PaymentInPage> {
                       ),
                     ),
                     maxLines: 3,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a description';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(height: 16),
 
@@ -229,7 +260,7 @@ class _PaymentInPageState extends State<PaymentInPage> {
 
             // Save Button
             Padding(
-              padding: EdgeInsets.only(top:screenHeight * 0.14),
+              padding: EdgeInsets.only(top: screenHeight * 0.14),
               child: SizedBox(
                 width: screenWidth * 0.8,
                 height: 50,

@@ -220,7 +220,7 @@ class _MembersState extends State<Members> {
       
             // Add Member Button
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.only(bottom: screenHeight*0.04),
               child: SizedBox(
                 width: screenWidth * 0.8,
                 height: 50,

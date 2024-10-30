@@ -502,9 +502,17 @@ class _ProjectScreenState extends State<ProjectScreen> {
                                                 BorderRadius.circular(15),
                                           ),
                                         ),
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp(r'^[a-zA-Z\s]+$')),
+                                        ],
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
-                                            return 'Please enter a clinet name';
+                                            return 'Please enter a client name';
+                                          }
+                                          if (!RegExp(r'^[a-zA-Z\s]+$')
+                                              .hasMatch(value)) {
+                                            return 'Please enter only characters';
                                           }
                                           return null;
                                         },
