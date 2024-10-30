@@ -496,7 +496,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                                       TextFormField(
                                         controller: _clientNameController,
                                         decoration: InputDecoration(
-                                          labelText: 'Cilnet  Name',
+                                          labelText: 'Clinet  Name',
                                           border: OutlineInputBorder(
                                             borderRadius:
                                                 BorderRadius.circular(15),

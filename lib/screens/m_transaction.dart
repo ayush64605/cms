@@ -470,9 +470,12 @@ class _MTransactionState extends State<MTransaction> {
 
                         var Requestedorders = snapshot.data!.docs;
                         if (_searchQuery.isNotEmpty) {
-                          Requestedorders = Requestedorders.where((Requestedorders) {
+                          Requestedorders =
+                              Requestedorders.where((Requestedorders) {
                             var RequestedordersName =
-                                Requestedorders['clientName'].toString().toLowerCase();
+                                Requestedorders['clientName']
+                                    .toString()
+                                    .toLowerCase();
                             return RequestedordersName.contains(_searchQuery);
                           }).toList();
                         }
@@ -615,6 +618,10 @@ class _MTransactionState extends State<MTransaction> {
                                                         children: <Widget>[
                                                           ElevatedButton(
                                                             onPressed: () {
+                                                              _amountController
+                                                                  .clear();
+                                                              _ReceivedDateController
+                                                                  .clear();
                                                               showModalBottomSheet(
                                                                 context:
                                                                     context,
@@ -676,7 +683,7 @@ class _MTransactionState extends State<MTransaction> {
                                                                               decoration: InputDecoration(
                                                                                 labelText: 'Total amount',
                                                                                 border: OutlineInputBorder(
-                                                                                  borderRadius: BorderRadius.circular(0),
+                                                                                  borderRadius: BorderRadius.circular(15),
                                                                                 ),
                                                                               ),
                                                                               validator: (value) {
@@ -693,19 +700,37 @@ class _MTransactionState extends State<MTransaction> {
                                                                               onTap: () => _selectDate(context, _ReceivedDateController),
                                                                               decoration: InputDecoration(
                                                                                 labelText: 'Received date',
-                                                                                border: OutlineInputBorder(),
-                                                                                focusedBorder: OutlineInputBorder(
-                                                                                  borderSide: BorderSide(color: Color.fromARGB(255, 4, 63, 132)),
-                                                                                ),
-                                                                                enabledBorder: OutlineInputBorder(
-                                                                                  borderSide: BorderSide(color: Color.fromARGB(255, 4, 63, 132)),
+                                                                                border: OutlineInputBorder(
+                                                                                  borderRadius: BorderRadius.circular(15),
                                                                                 ),
                                                                               ),
+                                                                              validator: (value) {
+                                                                                if (value == null || value.isEmpty) {
+                                                                                  return 'Please select a received date';
+                                                                                }
+                                                                                return null;
+                                                                              },
                                                                             ),
                                                                             SizedBox(height: 20),
                                                                             Row(
                                                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                               children: [
+                                                                                ElevatedButton(
+                                                                                  onPressed: () {
+                                                                                    Navigator.of(context).pop(); // Close the bottom sheet
+                                                                                  },
+                                                                                  child: Text(
+                                                                                    'Cancel',
+                                                                                    style: TextStyle(fontSize: 16, color: Colors.white),
+                                                                                  ),
+                                                                                  style: ElevatedButton.styleFrom(
+                                                                                    backgroundColor: Color.fromARGB(255, 214, 10, 10),
+                                                                                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                                                                    shape: RoundedRectangleBorder(
+                                                                                      borderRadius: BorderRadius.circular(15),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
                                                                                 ElevatedButton(
                                                                                   onPressed: () async {
                                                                                     if (_formKey.currentState!.validate()) {
@@ -749,22 +774,6 @@ class _MTransactionState extends State<MTransaction> {
                                                                                   ),
                                                                                   style: ElevatedButton.styleFrom(
                                                                                     backgroundColor: const Color.fromRGBO(1, 42, 86, 1),
-                                                                                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                                                                    shape: RoundedRectangleBorder(
-                                                                                      borderRadius: BorderRadius.circular(15),
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                                ElevatedButton(
-                                                                                  onPressed: () {
-                                                                                    Navigator.of(context).pop(); // Close the bottom sheet
-                                                                                  },
-                                                                                  child: Text(
-                                                                                    'Cancel',
-                                                                                    style: TextStyle(fontSize: 16, color: Colors.white),
-                                                                                  ),
-                                                                                  style: ElevatedButton.styleFrom(
-                                                                                    backgroundColor: Color.fromARGB(255, 214, 10, 10),
                                                                                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                                                                     shape: RoundedRectangleBorder(
                                                                                       borderRadius: BorderRadius.circular(15),
@@ -936,12 +945,12 @@ class _MTransactionState extends State<MTransaction> {
                         var Acceptedorder = snapshot.data!.docs;
                         if (_searchQuery.isNotEmpty) {
                           Acceptedorder = Acceptedorder.where((Acceptedorder) {
-                            var AcceptedorderName =
-                                Acceptedorder['clientName'].toString().toLowerCase();
+                            var AcceptedorderName = Acceptedorder['clientName']
+                                .toString()
+                                .toLowerCase();
                             return AcceptedorderName.contains(_searchQuery);
                           }).toList();
                         }
-
 
                         if (Acceptedorder.isEmpty) {
                           return Center(child: Text('No received payments.'));
@@ -1066,6 +1075,112 @@ class _MTransactionState extends State<MTransaction> {
                                                 ],
                                               ),
                                             ),
+                                            IconButton(
+                                              icon: Icon(Icons.more_vert,
+                                                  color: Colors.black54),
+                                              onPressed: () {
+                                                showModalBottomSheet(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return Container(
+                                                      height: 100,
+                                                      padding:
+                                                          EdgeInsets.all(16),
+                                                      child: Column(
+                                                        children: <Widget>[
+                                                          SizedBox(height: 10),
+                                                          ElevatedButton(
+                                                            onPressed:
+                                                                () async {
+                                                              try {
+                                                                await FirebaseFirestore
+                                                                    .instance
+                                                                    .collection(
+                                                                        'users')
+                                                                    .doc(widget
+                                                                        .userId)
+                                                                    .collection(
+                                                                        'orders')
+                                                                    .doc(
+                                                                        AcceptedorderDocId)
+                                                                    .delete();
+
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                  SnackBar(
+                                                                    content: Text(
+                                                                        'payment deleted successfully.'),
+                                                                  ),
+                                                                );
+
+                                                                Navigator.pop(
+                                                                    context); // Close the modal after deletion
+                                                              } catch (e) {
+                                                                // Show an error message
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                  SnackBar(
+                                                                    content: Text(
+                                                                        'Failed to delete payment: $e'),
+                                                                  ),
+                                                                );
+                                                                print(
+                                                                    'Error deleting payment: $e'); // Log the error
+                                                              } finally {
+                                                                if (mounted) {
+                                                                  setState(() {
+                                                                    _isLoading =
+                                                                        false;
+                                                                  });
+                                                                }
+                                                              }
+                                                            },
+                                                            style:
+                                                                ElevatedButton
+                                                                    .styleFrom(
+                                                              backgroundColor:
+                                                                  Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          214,
+                                                                          10,
+                                                                          10),
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      vertical:
+                                                                          15),
+                                                              shape:
+                                                                  RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                            ),
+                                                            child: Align(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: Text(
+                                                                'Delete',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        16,
+                                                                    color: Colors
+                                                                        .white),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                            )
                                           ],
                                         ),
                                       ],

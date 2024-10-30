@@ -513,6 +513,30 @@ class _MMaterialState extends State<MMaterial> {
                                             onPressed: _isLoading
                                                 ? null
                                                 : () {
+                                                    Navigator.of(context)
+                                                        .pop(); // Close the bottom sheet
+                                                  },
+                                            child: Text(
+                                              'Cancel',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white),
+                                            ),
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Color.fromARGB(
+                                                  255, 214, 10, 10),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 20, vertical: 10),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                            ),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: _isLoading
+                                                ? null
+                                                : () {
                                                     if (_formKey.currentState!
                                                         .validate()) {
                                                       _storeMaterialData(
@@ -541,30 +565,6 @@ class _MMaterialState extends State<MMaterial> {
                                               backgroundColor:
                                                   const Color.fromRGBO(
                                                       1, 42, 86, 1),
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 20, vertical: 10),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                              ),
-                                            ),
-                                          ),
-                                          ElevatedButton(
-                                            onPressed: _isLoading
-                                                ? null
-                                                : () {
-                                                    Navigator.of(context)
-                                                        .pop(); // Close the bottom sheet
-                                                  },
-                                            child: Text(
-                                              'Cancel',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.white),
-                                            ),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: Color.fromARGB(
-                                                  255, 214, 10, 10),
                                               padding: EdgeInsets.symmetric(
                                                   horizontal: 20, vertical: 10),
                                               shape: RoundedRectangleBorder(
@@ -609,12 +609,12 @@ class _MMaterialState extends State<MMaterial> {
 
                     var material = snapshot.data!.docs;
                     if (_searchQuery.isNotEmpty) {
-                          material = material.where((material) {
-                            var materialName =
-                                material['materialName'].toString().toLowerCase();
-                            return materialName.contains(_searchQuery);
-                          }).toList();
-                        }
+                      material = material.where((material) {
+                        var materialName =
+                            material['materialName'].toString().toLowerCase();
+                        return materialName.contains(_searchQuery);
+                      }).toList();
+                    }
 
                     if (material.isEmpty) {
                       return Center(child: Text('No material added.'));
@@ -828,6 +828,32 @@ class _MMaterialState extends State<MMaterial> {
                                                                         ElevatedButton(
                                                                           onPressed:
                                                                               () {
+                                                                            Navigator.of(context).pop(); // Close the bottom sheet
+                                                                          },
+                                                                          child:
+                                                                              Text(
+                                                                            'Cancel',
+                                                                            style:
+                                                                                TextStyle(fontSize: 16, color: Colors.white),
+                                                                          ),
+                                                                          style:
+                                                                              ElevatedButton.styleFrom(
+                                                                            backgroundColor: Color.fromARGB(
+                                                                                255,
+                                                                                214,
+                                                                                10,
+                                                                                10),
+                                                                            padding:
+                                                                                EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                                                            shape:
+                                                                                RoundedRectangleBorder(
+                                                                              borderRadius: BorderRadius.circular(15),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        ElevatedButton(
+                                                                          onPressed:
+                                                                              () {
                                                                             if (_formKey.currentState!.validate()) {
                                                                               // Process data (e.g., save the new project)
                                                                               // You can access the values like this:
@@ -858,32 +884,6 @@ class _MMaterialState extends State<MMaterial> {
                                                                                 42,
                                                                                 86,
                                                                                 1),
-                                                                            padding:
-                                                                                EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                                                            shape:
-                                                                                RoundedRectangleBorder(
-                                                                              borderRadius: BorderRadius.circular(15),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        ElevatedButton(
-                                                                          onPressed:
-                                                                              () {
-                                                                            Navigator.of(context).pop(); // Close the bottom sheet
-                                                                          },
-                                                                          child:
-                                                                              Text(
-                                                                            'Cancel',
-                                                                            style:
-                                                                                TextStyle(fontSize: 16, color: Colors.white),
-                                                                          ),
-                                                                          style:
-                                                                              ElevatedButton.styleFrom(
-                                                                            backgroundColor: Color.fromARGB(
-                                                                                255,
-                                                                                214,
-                                                                                10,
-                                                                                10),
                                                                             padding:
                                                                                 EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                                                             shape:

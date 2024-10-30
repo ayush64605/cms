@@ -475,15 +475,23 @@ class _MaterialsideState extends State<Materialside> {
                                       TextFormField(
                                         controller: _clientNameController,
                                         decoration: InputDecoration(
-                                          labelText: 'Cilnet  Name',
+                                          labelText: 'Clinet  Name',
                                           border: OutlineInputBorder(
                                             borderRadius:
                                                 BorderRadius.circular(15),
                                           ),
                                         ),
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp(r'^[a-zA-Z\s]+$')),
+                                        ],
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
-                                            return 'Please enter a clinet name';
+                                            return 'Please enter a client name';
+                                          }
+                                          if (!RegExp(r'^[a-zA-Z\s]+$')
+                                              .hasMatch(value)) {
+                                            return 'Please enter only characters';
                                           }
                                           return null;
                                         },
@@ -493,15 +501,23 @@ class _MaterialsideState extends State<Materialside> {
                                         keyboardType: TextInputType.number,
                                         controller: _clientNumberController,
                                         decoration: InputDecoration(
-                                          labelText: 'Cilnet  Number',
+                                          labelText: 'Client Number',
                                           border: OutlineInputBorder(
                                             borderRadius:
                                                 BorderRadius.circular(15),
                                           ),
                                         ),
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter
+                                              .digitsOnly,
+                                          LengthLimitingTextInputFormatter(10),
+                                        ],
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
-                                            return "Please enter a clinet's number";
+                                            return "Please enter a client's number";
+                                          }
+                                          if (value.length != 10) {
+                                            return 'Please enter a 10-digit number';
                                           }
                                           return null;
                                         },
@@ -530,6 +546,28 @@ class _MaterialsideState extends State<Materialside> {
                                         children: [
                                           ElevatedButton(
                                             onPressed: () {
+                                              Navigator.of(context)
+                                                  .pop(); // Close the bottom sheet
+                                            },
+                                            child: Text(
+                                              'Cancel',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white),
+                                            ),
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Color.fromARGB(
+                                                  255, 214, 10, 10),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 20, vertical: 10),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                            ),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: () {
                                               if (_formKey.currentState!
                                                   .validate()) {
                                                 _storeorderData();
@@ -545,28 +583,6 @@ class _MaterialsideState extends State<Materialside> {
                                               backgroundColor:
                                                   const Color.fromRGBO(
                                                       1, 42, 86, 1),
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 20, vertical: 10),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                              ),
-                                            ),
-                                          ),
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              Navigator.of(context)
-                                                  .pop(); // Close the bottom sheet
-                                            },
-                                            child: Text(
-                                              'Cancel',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.white),
-                                            ),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: Color.fromARGB(
-                                                  255, 214, 10, 10),
                                               padding: EdgeInsets.symmetric(
                                                   horizontal: 20, vertical: 10),
                                               shape: RoundedRectangleBorder(
@@ -716,7 +732,7 @@ class _MaterialsideState extends State<Materialside> {
                         }
 
                         var orders = snapshot.data!.docs;
-                         if (_searchQuery.isNotEmpty) {
+                        if (_searchQuery.isNotEmpty) {
                           orders = orders.where((orders) {
                             var ordersName =
                                 orders['materialName'].toString().toLowerCase();
@@ -1075,7 +1091,6 @@ class _MaterialsideState extends State<Materialside> {
                             return ordersName.contains(_searchQuery);
                           }).toList();
                         }
-                        
 
                         if (order.isEmpty) {
                           return Center(child: Text('No accepted orders.'));
