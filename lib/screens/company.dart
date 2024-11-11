@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:myapp/screens/project_screen.dart';
-import 'package:myapp/screens/materialside.dart'; // Import MaterialSide screen
+import 'package:myapp/screens/materialside.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Company extends StatefulWidget {
   final String phoneNumber;
-  final String profession; // Add phoneNumber and profession parameters
+  final String profession;
 
   const Company({required this.phoneNumber, required this.profession});
   
@@ -25,23 +26,16 @@ class _CompanyState extends State<Company> {
     final double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     final bool isKeyboardVisible = keyboardHeight > 0;
 
-    // Fixed paddings for when the keyboard is not visible
     final double imageTopPadding = 140.0;
     final double imageLeftRightPadding = screenWidth * 0.10;
-
-    // Adjusted paddings only when the keyboard is visible
-    final double adjustedImageTopPadding =
-        isKeyboardVisible ? 20.0 : imageTopPadding;
-    final double adjustedImageLeftRightPadding =
-        isKeyboardVisible ? screenWidth * 0.15 : imageLeftRightPadding;
-
-    final double imageScale = isKeyboardVisible ? 0.5 : 1.0; // Scale down to 50% when the keyboard is visible
+    final double adjustedImageTopPadding = isKeyboardVisible ? 20.0 : imageTopPadding;
+    final double adjustedImageLeftRightPadding = isKeyboardVisible ? screenWidth * 0.15 : imageLeftRightPadding;
+    final double imageScale = isKeyboardVisible ? 0.5 : 1.0;
     final double bottomPadding = isKeyboardVisible ? keyboardHeight + 5 : 100;
 
     return Scaffold(
       body: Stack(
         children: [
-          // Background content
           Positioned(
             top: screenHeight * 0.08,
             left: 0,
@@ -74,7 +68,6 @@ class _CompanyState extends State<Company> {
               ],
             ),
           ),
-          // Image
           Positioned(
             top: adjustedImageTopPadding,
             left: adjustedImageLeftRightPadding,
@@ -92,7 +85,6 @@ class _CompanyState extends State<Company> {
               ),
             ),
           ),
-          // TextField and Next Button
           Positioned(
             bottom: bottomPadding,
             left: screenWidth * 0.10,
@@ -135,7 +127,7 @@ class _CompanyState extends State<Company> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    await _storeCompanyDetails(); // Store data in Firestore
+                    await _storeCompanyDetails();
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
@@ -163,31 +155,31 @@ class _CompanyState extends State<Company> {
 
   Future<void> _storeCompanyDetails() async {
     try {
-      String userId = _mobileNumberController.text.trim();
       // Create a new document in Firestore
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(widget.phoneNumber)
-          .update({
+      await FirebaseFirestore.instance.collection('users').doc(widget.phoneNumber).update({
         'companyName': _companyNameController.text.trim(),
-        'companyNumber': userId,
+        'companyNumber': _mobileNumberController.text.trim(),
         'city': _cityController.text.trim(),
       });
 
+      // Save login state and user ID to shared preferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', true);
+      await prefs.setString('userId', widget.phoneNumber);
+
       // Navigate based on profession
       if (widget.profession == 'owner') {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => ProjectScreen(userId: widget.phoneNumber)),
         );
       } else if (widget.profession == 'Material supplier') {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => Materialside(userId: widget.phoneNumber)),
         );
       }
     } catch (e) {
-      // Handle error
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to save company details: $e')),
       );

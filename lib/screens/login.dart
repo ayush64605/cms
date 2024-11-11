@@ -5,7 +5,9 @@ import 'dart:math';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:myapp/screens/otp.dart';
 import 'package:myapp/screens/sms_service.dart';
-import 'package:myapp/screens/password.dart'; // Adjust the import path accordingly
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:myapp/screens/project_screen.dart';
+import 'package:myapp/screens/password.dart'; // Ensure this path is correct
 
 class PhoneScreen extends StatefulWidget {
   @override
@@ -43,10 +45,7 @@ class _PhoneScreenState extends State<PhoneScreen> {
 
   Future<bool> _checkIfPhoneNumberExists(String phoneNumber) async {
     try {
-      final querySnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(phoneNumber)
-          .get();
+      final querySnapshot = await FirebaseFirestore.instance.collection('users').doc(phoneNumber).get();
       return querySnapshot.exists;
     } catch (e) {
       print('Error checking phone number: $e');
@@ -79,10 +78,15 @@ class _PhoneScreenState extends State<PhoneScreen> {
       final exists = await _checkIfPhoneNumberExists(fullPhoneNumber);
 
       if (exists) {
-        Navigator.push(
+        // Store login state and user ID
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isLoggedIn', true);
+        await prefs.setString('userId', fullPhoneNumber);
+
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => PasswordScreen(phoneNumber: fullPhoneNumber, isFromOtp: false, isFromPhoneScreen: true),
+            builder: (context) => PasswordScreen(phoneNumber: fullPhoneNumber, isFromOtp: false, isFromPhoneScreen: true,), // Redirect to PasswordScreen
           ),
         );
       } else {
@@ -94,7 +98,7 @@ class _PhoneScreenState extends State<PhoneScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => OTPScreen(phoneNumber: fullPhoneNumber, verificationCode: verificationCode, isFromPassword: false, isFromchangepassword: false, isFromPhoneScreen: true,),
+              builder: (context) => OTPScreen(phoneNumber: fullPhoneNumber, verificationCode: verificationCode, isFromPassword: false, isFromchangepassword: false, isFromPhoneScreen: true),
             ),
           );
         } catch (e) {
@@ -123,10 +127,8 @@ class _PhoneScreenState extends State<PhoneScreen> {
 
     final double imageTopPadding = 240.0;
     final double imageLeftRightPadding = screenWidth * 0.10;
-    final double adjustedImageTopPadding =
-        isKeyboardVisible ? 120.0 : imageTopPadding;
-    final double adjustedImageLeftRightPadding =
-        isKeyboardVisible ? screenWidth * 0.15 : imageLeftRightPadding;
+    final double adjustedImageTopPadding = isKeyboardVisible ? 120.0 : imageTopPadding;
+    final double adjustedImageLeftRightPadding = isKeyboardVisible ? screenWidth * 0.15 : imageLeftRightPadding;
     final double imageScale = isKeyboardVisible ? 0.5 : 1.0;
     final double bottomPadding = isKeyboardVisible ? keyboardHeight + 20 : 100;
 

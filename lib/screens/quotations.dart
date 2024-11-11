@@ -9,6 +9,7 @@ import 'package:myapp/screens/members.dart';
 import 'package:myapp/screens/parties.dart';
 import 'package:myapp/screens/project_screen.dart';
 import 'package:myapp/screens/transaction.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class quotationscreen extends StatefulWidget {
   final String userId;
@@ -296,8 +297,17 @@ class _quotationscreenState extends State<quotationscreen> {
                       ListTile(
                         leading: Icon(Icons.logout),
                         title: Text('Logout'),
-                        onTap: () {
-                          Navigator.push(
+                        onTap: () async {
+                          // Clear login state from SharedPreferences
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          await prefs.setBool(
+                              'isLoggedIn', false); // Set 'isLoggedIn' to false
+                          await prefs.remove(
+                              'userId'); // Optionally, remove 'userId' as well
+
+                          // Redirect to PhoneScreen
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) => PhoneScreen(),
