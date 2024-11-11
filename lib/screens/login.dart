@@ -30,9 +30,13 @@ class _PhoneScreenState extends State<PhoneScreen> {
     );
   }
 
-  Future<void> _storePhoneNumber(String phoneNumber, String verificationCode) async {
+  Future<void> _storePhoneNumber(
+      String phoneNumber, String verificationCode) async {
     try {
-      await FirebaseFirestore.instance.collection('phoneNumbers').doc(phoneNumber).set({
+      await FirebaseFirestore.instance
+          .collection('phoneNumbers')
+          .doc(phoneNumber)
+          .set({
         'phoneNumber': phoneNumber,
         'verificationCode': verificationCode,
         'timestamp': FieldValue.serverTimestamp(),
@@ -45,7 +49,10 @@ class _PhoneScreenState extends State<PhoneScreen> {
 
   Future<bool> _checkIfPhoneNumberExists(String phoneNumber) async {
     try {
-      final querySnapshot = await FirebaseFirestore.instance.collection('users').doc(phoneNumber).get();
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(phoneNumber)
+          .get();
       return querySnapshot.exists;
     } catch (e) {
       print('Error checking phone number: $e');
@@ -86,7 +93,11 @@ class _PhoneScreenState extends State<PhoneScreen> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => PasswordScreen(phoneNumber: fullPhoneNumber, isFromOtp: false, isFromPhoneScreen: true,), // Redirect to PasswordScreen
+            builder: (context) => PasswordScreen(
+              phoneNumber: fullPhoneNumber,
+              isFromOtp: false,
+              isFromPhoneScreen: true,
+            ), // Redirect to PasswordScreen
           ),
         );
       } else {
@@ -94,11 +105,17 @@ class _PhoneScreenState extends State<PhoneScreen> {
         await _storePhoneNumber(fullPhoneNumber, verificationCode);
 
         try {
-          await smsService.sendSms(fullPhoneNumber, 'Your verification code is $verificationCode');
+          await smsService.sendSms(
+              fullPhoneNumber, 'Your verification code is $verificationCode');
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => OTPScreen(phoneNumber: fullPhoneNumber, verificationCode: verificationCode, isFromPassword: false, isFromchangepassword: false, isFromPhoneScreen: true),
+              builder: (context) => OTPScreen(
+                  phoneNumber: fullPhoneNumber,
+                  verificationCode: verificationCode,
+                  isFromPassword: false,
+                  isFromchangepassword: false,
+                  isFromPhoneScreen: true),
             ),
           );
         } catch (e) {
@@ -127,8 +144,10 @@ class _PhoneScreenState extends State<PhoneScreen> {
 
     final double imageTopPadding = 240.0;
     final double imageLeftRightPadding = screenWidth * 0.10;
-    final double adjustedImageTopPadding = isKeyboardVisible ? 120.0 : imageTopPadding;
-    final double adjustedImageLeftRightPadding = isKeyboardVisible ? screenWidth * 0.15 : imageLeftRightPadding;
+    final double adjustedImageTopPadding =
+        isKeyboardVisible ? 120.0 : imageTopPadding;
+    final double adjustedImageLeftRightPadding =
+        isKeyboardVisible ? screenWidth * 0.15 : imageLeftRightPadding;
     final double imageScale = isKeyboardVisible ? 0.5 : 1.0;
     final double bottomPadding = isKeyboardVisible ? keyboardHeight + 20 : 100;
 
@@ -203,6 +222,11 @@ class _PhoneScreenState extends State<PhoneScreen> {
                         border: OutlineInputBorder(),
                         labelText: 'Enter your phone number',
                         prefixIcon: Icon(Icons.phone),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(1, 42, 86, 1),
+                              width: 2.0), // Change to your preferred color
+                        ),
                       ),
                       initialCountryCode: 'IN', // Initial country code
                       onChanged: (phone) {
@@ -225,7 +249,8 @@ class _PhoneScreenState extends State<PhoneScreen> {
                     ),
                     child: _isLoading
                         ? CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(Color.fromRGBO(1, 42, 86, 1)),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                Color.fromRGBO(1, 42, 86, 1)),
                           )
                         : Text(
                             'Next',

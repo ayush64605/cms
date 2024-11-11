@@ -209,7 +209,8 @@ class _MaterialscreenState extends State<Materialscreen> {
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(
+                                Color.fromRGBO(1, 42, 86, 1)),));
                   }
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                     return Center(child: Text("No materials found."));

@@ -298,6 +298,11 @@ Future<void> _validatePassword() async {
                       border: OutlineInputBorder(),
                       labelText: 'Password',
                       prefixIcon: Icon(Icons.lock),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(1, 42, 86, 1),
+                              width: 2.0), // Change to your preferred color
+                        ),
                     ),
                   ),
                 ),
@@ -312,6 +317,11 @@ Future<void> _validatePassword() async {
                         border: OutlineInputBorder(),
                         labelText: 'Confirm your password',
                         prefixIcon: Icon(Icons.lock),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(1, 42, 86, 1),
+                              width: 2.0), // Change to your preferred color
+                        ),
                       ),
                     ),
                   ),

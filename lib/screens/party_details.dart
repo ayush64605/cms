@@ -171,7 +171,8 @@ class _PartyDetailsState extends State<PartyDetails> {
                             .snapshots(),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
-                            return Center(child: CircularProgressIndicator());
+                            return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(
+                                Color.fromRGBO(1, 42, 86, 1)),));
                           }
 
                           final payments = snapshot.data!.docs;

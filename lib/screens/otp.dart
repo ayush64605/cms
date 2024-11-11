@@ -233,6 +233,11 @@ class _OTPScreenState extends State<OTPScreen> {
                       border: OutlineInputBorder(),
                       labelText: 'Enter OTP',
                       prefixIcon: Icon(Icons.lock),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(1, 42, 86, 1),
+                              width: 2.0), // Change to your preferred color
+                        ),
                     ),
                     onChanged: _onOtpChanged,
                   ),

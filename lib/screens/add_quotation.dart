@@ -202,7 +202,8 @@ class _AddQuotationState extends State<AddQuotation> {
                                     if (snapshot.connectionState ==
                                         ConnectionState.waiting) {
                                       return Center(
-                                          child: CircularProgressIndicator());
+                                          child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(
+                                Color.fromRGBO(1, 42, 86, 1)),));
                                     }
                                     if (snapshot.hasError) {
                                       return Center(
@@ -358,7 +359,8 @@ class _AddQuotationState extends State<AddQuotation> {
                   stream: _fetchQuotationItems(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
+                      return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(
+                                Color.fromRGBO(1, 42, 86, 1)),));
                     }
                     if (snapshot.hasError) {
                       return Center(child: Text('Error: ${snapshot.error}'));
@@ -543,7 +545,8 @@ class _AddQuotationState extends State<AddQuotation> {
                 stream: _fetchQuotationItems(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(
+                                Color.fromRGBO(1, 42, 86, 1)),));
                   }
                   if (snapshot.hasError) {
                     return Center(child: Text('Error: ${snapshot.error}'));

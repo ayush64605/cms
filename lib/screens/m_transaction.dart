@@ -475,7 +475,8 @@ class _MTransactionState extends State<MTransaction> {
                       stream: _fetchpaymentlist('Delivered', 'payment left'),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
-                          return Center(child: CircularProgressIndicator());
+                          return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(
+                                Color.fromRGBO(1, 42, 86, 1)),));
                         }
 
                         var Requestedorders = snapshot.data!.docs;
@@ -949,7 +950,8 @@ class _MTransactionState extends State<MTransaction> {
                           _fetchpaymentlist('Delivered', 'payment received'),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
-                          return Center(child: CircularProgressIndicator());
+                          return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(
+                                Color.fromRGBO(1, 42, 86, 1)),));
                         }
 
                         var Acceptedorder = snapshot.data!.docs;

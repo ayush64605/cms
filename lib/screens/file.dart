@@ -342,10 +342,12 @@ class _FileScreenState extends State<FileScreen> {
               ),
             ),
             if (isUploading) // Show loader while uploading photo
-              Center(child: CircularProgressIndicator()),
+              Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(
+                                Color.fromRGBO(1, 42, 86, 1)),)),
             Expanded(
               child: isLoading // Show loader while loading data
-                  ? Center(child: CircularProgressIndicator())
+                  ? Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(
+                                Color.fromRGBO(1, 42, 86, 1)),))
                   : GridView.builder(
                       padding: EdgeInsets.all(10.0),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

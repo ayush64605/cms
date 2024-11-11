@@ -738,7 +738,8 @@ class _MaterialsideState extends State<Materialside> {
                       stream: _fetchorders('Requested'),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
-                          return Center(child: CircularProgressIndicator());
+                          return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(
+                                Color.fromRGBO(1, 42, 86, 1)),));
                         }
 
                         var orders = snapshot.data!.docs;
@@ -1090,7 +1091,8 @@ class _MaterialsideState extends State<Materialside> {
                       stream: _fetchorders('Accepted'),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
-                          return Center(child: CircularProgressIndicator());
+                          return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(
+                                Color.fromRGBO(1, 42, 86, 1)),));
                         }
 
                         var order = snapshot.data!.docs;
@@ -1441,7 +1443,8 @@ class _MaterialsideState extends State<Materialside> {
                       stream: _fetchorders('Delivered'),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
-                          return Center(child: CircularProgressIndicator());
+                          return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(
+                                Color.fromRGBO(1, 42, 86, 1)),));
                         }
 
                         var order = snapshot.data!.docs;

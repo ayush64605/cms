@@ -447,6 +447,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                             ),
                             contentPadding:
                                 EdgeInsets.symmetric(horizontal: 20),
+
                           ),
                         ),
                       ),
@@ -730,7 +731,8 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       stream: _fetchProjects('Ongoing'),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
-                          return Center(child: CircularProgressIndicator());
+                          return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(
+                                Color.fromRGBO(1, 42, 86, 1)),));
                         }
 
                         var ongoingProjects = snapshot.data!.docs;
@@ -1025,7 +1027,8 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       stream: _fetchProjects('completed'),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
-                          return Center(child: CircularProgressIndicator());
+                          return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(
+                                Color.fromRGBO(1, 42, 86, 1)),));
                         }
 
                         var completedProjects = snapshot.data!.docs;

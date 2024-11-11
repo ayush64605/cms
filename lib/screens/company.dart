@@ -9,7 +9,7 @@ class Company extends StatefulWidget {
   final String profession;
 
   const Company({required this.phoneNumber, required this.profession});
-  
+
   @override
   _CompanyState createState() => _CompanyState();
 }
@@ -28,8 +28,10 @@ class _CompanyState extends State<Company> {
 
     final double imageTopPadding = 140.0;
     final double imageLeftRightPadding = screenWidth * 0.10;
-    final double adjustedImageTopPadding = isKeyboardVisible ? 20.0 : imageTopPadding;
-    final double adjustedImageLeftRightPadding = isKeyboardVisible ? screenWidth * 0.15 : imageLeftRightPadding;
+    final double adjustedImageTopPadding =
+        isKeyboardVisible ? 20.0 : imageTopPadding;
+    final double adjustedImageLeftRightPadding =
+        isKeyboardVisible ? screenWidth * 0.15 : imageLeftRightPadding;
     final double imageScale = isKeyboardVisible ? 0.5 : 1.0;
     final double bottomPadding = isKeyboardVisible ? keyboardHeight + 5 : 100;
 
@@ -101,6 +103,11 @@ class _CompanyState extends State<Company> {
                           border: OutlineInputBorder(),
                           labelText: 'Company name',
                           prefixIcon: Icon(Icons.business),
+                          focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(1, 42, 86, 1),
+                              width: 2.0), // Change to your preferred color
+                        ),
                         ),
                       ),
                       SizedBox(height: 10),
@@ -111,6 +118,11 @@ class _CompanyState extends State<Company> {
                           border: OutlineInputBorder(),
                           labelText: 'Mobile number',
                           prefixIcon: Icon(Icons.call),
+                          focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(1, 42, 86, 1),
+                              width: 2.0), // Change to your preferred color
+                        ),
                         ),
                       ),
                       SizedBox(height: 10),
@@ -120,6 +132,11 @@ class _CompanyState extends State<Company> {
                           border: OutlineInputBorder(),
                           labelText: 'City',
                           prefixIcon: Icon(Icons.location_on),
+                          focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(1, 42, 86, 1),
+                              width: 2.0), // Change to your preferred color
+                        ),
                         ),
                       ),
                     ],
@@ -154,9 +171,31 @@ class _CompanyState extends State<Company> {
   }
 
   Future<void> _storeCompanyDetails() async {
+    if (_companyNameController.text.isEmpty ||
+        _mobileNumberController.text.isEmpty ||
+        _cityController.text.isEmpty ||
+        _mobileNumberController.text.length != 10) {
+      // Show an error message if any field is empty or mobile number is not 10 digits
+      String errorMessage='';
+      if (_companyNameController.text.isEmpty ||
+          _mobileNumberController.text.isEmpty ||
+          _cityController.text.isEmpty) {
+        errorMessage = 'Please fill in all fields';
+      } else if (_mobileNumberController.text.length != 10) {
+        errorMessage = 'Mobile number must be 10 digits';
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMessage)),
+      );
+      return;
+    }
+
     try {
       // Create a new document in Firestore
-      await FirebaseFirestore.instance.collection('users').doc(widget.phoneNumber).update({
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.phoneNumber)
+          .update({
         'companyName': _companyNameController.text.trim(),
         'companyNumber': _mobileNumberController.text.trim(),
         'city': _cityController.text.trim(),
@@ -171,12 +210,14 @@ class _CompanyState extends State<Company> {
       if (widget.profession == 'owner') {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => ProjectScreen(userId: widget.phoneNumber)),
+          MaterialPageRoute(
+              builder: (context) => ProjectScreen(userId: widget.phoneNumber)),
         );
       } else if (widget.profession == 'Material supplier') {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Materialside(userId: widget.phoneNumber)),
+          MaterialPageRoute(
+              builder: (context) => Materialside(userId: widget.phoneNumber)),
         );
       }
     } catch (e) {

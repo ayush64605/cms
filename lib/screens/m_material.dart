@@ -614,7 +614,8 @@ class _MMaterialState extends State<MMaterial> {
                   stream: _fetchmaterial(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return Center(child: CircularProgressIndicator());
+                      return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(
+                                Color.fromRGBO(1, 42, 86, 1)),));
                     }
 
                     var material = snapshot.data!.docs;
