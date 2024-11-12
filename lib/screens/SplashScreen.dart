@@ -120,8 +120,9 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
               'Effortless Site Management for Modern Builders',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
+                color:  Color.fromRGBO(1, 42, 86, 1),
               ),
             ),
           ],
