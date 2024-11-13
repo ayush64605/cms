@@ -517,6 +517,28 @@ class _quotationscreenState extends State<quotationscreen> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.of(context)
+                                                  .pop(); // Close the bottom sheet
+                                            },
+                                            child: Text(
+                                              'Cancel',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white),
+                                            ),
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Color.fromARGB(
+                                                  255, 214, 10, 10),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 20, vertical: 10),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                            ),
+                                          ),
+                                          ElevatedButton(
                                             onPressed: () async {
                                               if (_formKey.currentState!
                                                   .validate()) {
@@ -534,28 +556,6 @@ class _quotationscreenState extends State<quotationscreen> {
                                               backgroundColor:
                                                   const Color.fromRGBO(
                                                       1, 42, 86, 1),
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 20, vertical: 10),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                              ),
-                                            ),
-                                          ),
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              Navigator.of(context)
-                                                  .pop(); // Close the bottom sheet
-                                            },
-                                            child: Text(
-                                              'Cancel',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.white),
-                                            ),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: Color.fromARGB(
-                                                  255, 214, 10, 10),
                                               padding: EdgeInsets.symmetric(
                                                   horizontal: 20, vertical: 10),
                                               shape: RoundedRectangleBorder(
